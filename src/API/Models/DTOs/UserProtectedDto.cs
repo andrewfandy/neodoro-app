@@ -2,5 +2,6 @@
 
 public record UserProtectedDto(
     string? Email,
-    string? Username
+    string? Username,
+    string? Fullname
     );
