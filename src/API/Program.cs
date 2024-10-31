@@ -1,4 +1,5 @@
 using API.Databases;
+using API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +14,8 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddScoped<ApplicationDbConnection>();
-
-
-
-
-
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ActivityRepository>();
 
 var app = builder.Build();
 
