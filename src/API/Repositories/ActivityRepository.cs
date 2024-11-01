@@ -3,10 +3,12 @@ using API.Models.Entities;
 
 namespace API.Repositories;
 
+/*
+ * TODO:
+ * Connect ActivityRepository to Activity column
+ */
 public class ActivityRepository
 {
-    
-    
     public ActivityRepository()
     {
         
@@ -23,13 +25,13 @@ public class ActivityRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> CreateItemAsync(ActivityDetailDto model)
+    public Task<Activity> CreateItemAsync(ActivityDetailDto model)
     {
         
         throw new NotImplementedException();
     }
 
-    public Task<User> UpdateItemAsync(ActivityDetailDto model)
+    public Task<Activity> UpdateItemAsync(ActivityDetailDto model)
     {
         throw new NotImplementedException();
     }
