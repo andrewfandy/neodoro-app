@@ -4,7 +4,7 @@ public class Activity
 {
     public int Id { get; set; }
     
-    public required int ScheduleId { get; set; }
+    public required Schedule Schedule { get; set; }
     
     public required string Name { get; set; }
     
