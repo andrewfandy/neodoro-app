@@ -6,12 +6,10 @@ namespace API.Repositories;
 
 /*
  * TODO:
- * Connect UserRepository to Users column
+ * Connect UserRepository to User column
  */
 public class UserRepository
 {
-
-    
     public UserRepository()
     {
         
@@ -20,38 +18,25 @@ public class UserRepository
     
     public async Task<User?> GetItemAsync(int id)
     {
-        if (TableName == null) return null;
-        await Task.Delay(10);
-        var user = new User
-        {
-            Id = 1,
-            Email = "Hello World",
-            Username = "Hello World",
-            Password = "Hello World",
-            Fullname = "Hello World",
-            CreatedAt = default,
-            LastModified = default
-        };
-        return user;
+        throw new NotImplementedException();
     }
 
-    public Task<List<User>?> GetAllItemsAsync()
+    public async Task<List<User>?> GetAllItemsAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<User> CreateItemAsync(UserDetailDto model)
-    {
-        
-        throw new NotImplementedException();
-    }
-
-    public Task<User> UpdateItemAsync(UserDetailDto model)
+    public async Task<User> CreateItemAsync(UserDetailDto model)
     {
         throw new NotImplementedException();
     }
 
-    public Task<(bool status, string message)> DeleteItemAsync(int Id)
+    public async Task<User> UpdateItemAsync(UserDetailDto model)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<(bool status, string message)> DeleteItemAsync(int Id)
     {
         throw new NotImplementedException();
     }
