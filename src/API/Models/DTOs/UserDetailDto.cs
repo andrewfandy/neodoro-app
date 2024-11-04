@@ -3,7 +3,8 @@
 namespace API.Models.DTOs;
 
 public record UserDetailDto(
-    int? Id,
+    [Required(ErrorMessage = "Id is required")]
+    int Id,
     
     [Required(ErrorMessage = "Email is Required")]
     string Email,
