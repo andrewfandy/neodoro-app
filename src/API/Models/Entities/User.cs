@@ -10,8 +10,8 @@ public class User
     public required string Username { get; set; }
     
     public required string Password { get; set; }
-    
-    public required string Fullname { get; set; }
+
+    public string? Fullname { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     
