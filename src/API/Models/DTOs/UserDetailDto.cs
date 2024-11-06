@@ -15,7 +15,6 @@ public record UserDetailDto(
     [Required(ErrorMessage = "Password is Required")]
     string Password,
     
-    [Required(ErrorMessage = "Full name is Required")]
-    string Fullname
+    string? Fullname
     
     );
