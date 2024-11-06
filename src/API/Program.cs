@@ -1,5 +1,6 @@
 using API.Databases;
 using API.Repositories;
+using API.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +13,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+// Database and Repositories
 builder.Services.AddScoped<ApplicationDbConnection>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ScheduleRepository>();
 builder.Services.AddScoped<ActivityRepository>();
+builder.Services.AddScoped<TimerSessionRepository>();
+
+// Common and Utility services
+builder.Services.AddScoped<UserService>();
+
 
 var app = builder.Build();
 
