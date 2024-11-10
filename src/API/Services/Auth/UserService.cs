@@ -1,5 +1,5 @@
+using System.Collections.Immutable;
 using API.Models.DTOs;
-using API.Models.Entities;
 using API.Models.ViewModels;
 using API.Repositories;
 using API.Services.Common;
@@ -14,54 +14,154 @@ public class UserService
     {
         _repository = repository;
     }
+
+    public async Task<Result<UserViewModel?>> EditUserAsync(UserDetailDto model)
+    {
+        var result = await _repository.UpdateItemAsync(model);
+        var success = result != null;
+        
+        return new Result<UserViewModel?>()
+        {
+            Data = success ? new UserViewModel(
+                Id: result!.Id,
+                Email: result.Email,
+                Username: result.Username,
+                Fullname: result.Fullname
+            ) : null,
+            Message = success ? "SUCCESS" : "FAILED",
+            IsSuccess = success
+        };
+    }
+    public async Task<Result<UserViewModel?>> LoginUserAsync(UserLoginDto model)
+    {
+        var result = await _repository.GetItemAsync(model.Identity);
+
+        var authenticate = result != null && Authenticate(model.Password, result.Password);
+
+        return new Result<UserViewModel?>()
+        {
+            Data = authenticate
+                ? new UserViewModel(
+                    Id: result!.Id,
+                    Email: result.Email,
+                    Username: result.Username,
+                    Fullname: result.Fullname
+                )
+                : null,
+            IsSuccess = authenticate,
+            Message = authenticate ? "SUCCESS" : "INVALID_CREDENTIALS"
+        };
+    }
+
+    private bool Authenticate(string modelPassword, string hashedPassword)
+    {
+        var valid = BCrypt.Net.BCrypt.Verify(modelPassword, hashedPassword);
+        // TODO: set JWT after validation
+
+        return valid;
+    }
+
+    private void GenerateJwt()
+    {
+        throw new NotImplementedException();
+    }
     
-    
-    // change to ViewModel
-    public async Task<Result<User>> RegisterUserAsync(UserRegisterDto model)
+    public async Task<Result<UserViewModel?>> RegisterUserAsync(UserRegisterDto model)
     {
         
         var hashPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
         if (hashPassword == null)
-            return new Result<User>()
+            return new Result<UserViewModel?>()
             {
                 IsSuccess = false,
                 Message = "FAILED_ON_SERVICE",
                 Data = null
             };
-        
-        
-        var user = await _repository.CreateItemAsync(
+
+  
+        var result = await _repository.CreateItemAsync(
             new UserRegisterDto(
                 model.Email,
                 model.Username,
                 hashPassword
-                )
-            );
+            )
+        );
 
+        var success = result != null;
 
-        return new Result<User>()
+        return new Result<UserViewModel?>()
         {
-            IsSuccess = true,
-            Message = "USER_REGISTERED",
-            Data = user
+            IsSuccess = success,
+            Message = success ? "SUCCESS" : "USER_ALREADY_EXISTS",
+            Data = success ? new UserViewModel(
+                    Id: result!.Id,
+                    Email: result.Email,
+                    Username: result.Username,
+                    Fullname: result.Fullname
+                ) : null,
         };
+   
     }
 
     public async Task<Result<UserViewModel?>> GetUserByIdAsync(int id)
     {
         var result = await _repository.GetItemAsync(id);
-        var user = result.Data;
+        var success = result != null;
         
         return new Result<UserViewModel?>()
         {
-            Data = user != null ? new UserViewModel(
-                Id: user.Id,
-                Email: user.Email,
-                Username: user.Username,
-                Fullname: user.Fullname
+            Data = success ? new UserViewModel(
+                Id: result!.Id,
+                Email: result.Email,
+                Username: result.Username,
+                Fullname: result.Fullname
                 ) : null,
-            Message = result.Message,
-            IsSuccess = result.IsSuccess
+            Message = success ? "SUCCESS" : "NOT_FOUND",
+            IsSuccess = success
+        };
+    }
+
+    public async Task<Result<ImmutableList<UserViewModel>>> GetAllUsers()
+    {
+        var result = await _repository.GetAllItemsAsync();
+        var success = result.Any();
+        return new Result<ImmutableList<UserViewModel>>()
+        {
+            Data = result.Select(u => new UserViewModel(
+                u.Id,
+                u.Email,
+                u.Username,
+                u.Fullname)
+            ).ToImmutableList(),
+            Message = success ? "USERS_FOUND" : "NO_RECORD",
+            IsSuccess = success
+        };
+    }
+
+    public async Task<Result<bool>> DeleteUser(UserDetailDto model)
+    {
+        var existingUser = await _repository.GetItemAsync(model.Id);
+        if (existingUser == null) return new Result<bool>
+        {
+            IsSuccess = false,
+            Message = "NO SUCH USER"
+        };
+
+        var auth = Authenticate(model.Password, existingUser.Password);
+        if (!auth)
+        {
+            return new Result<bool>
+            {
+                IsSuccess = false,
+                Message = "PASSWORD NOT MATCH"
+            };
+        }
+
+        var result = await _repository.DeleteItemAsync(model.Id);
+        return new Result<bool>()
+        {
+            IsSuccess = true,
+            Message = $"USER {model.Email} with Id {model.Id} deleted"
         };
     }
 }
