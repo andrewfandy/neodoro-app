@@ -1,5 +1,5 @@
 using System.Collections.Immutable;
-using API.Models.DTOs;
+using API.Models.DTOs.Users;
 using API.Models.ViewModels;
 using API.Repositories;
 using API.Services.Common;
@@ -56,7 +56,6 @@ public class UserService
     private bool Authenticate(string modelPassword, string hashedPassword)
     {
         var valid = BCrypt.Net.BCrypt.Verify(modelPassword, hashedPassword);
-        // TODO: set JWT after validation
 
         return valid;
     }
