@@ -1,4 +1,5 @@
 using API.Models.DTOs;
+using API.Models.DTOs.Users;
 using API.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 
