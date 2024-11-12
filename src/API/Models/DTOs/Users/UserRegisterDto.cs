@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace API.Models.DTOs;
+namespace API.Models.DTOs.Users;
 
 public record UserRegisterDto(
     [Required(ErrorMessage = "Email is required")]
