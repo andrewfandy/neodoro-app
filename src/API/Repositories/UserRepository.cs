@@ -85,7 +85,7 @@ public class UserRepository
     }
     
     
-    public async Task<User?> GetItemAsync(int id)
+    public async Task<User?> GetUserByIdAsync(int id)
     {
         if (! await _connection.CheckTableIfExists(TableName)) await CreateTable();
 
@@ -99,7 +99,7 @@ public class UserRepository
         return user;
     }
     
-    public async Task<User?> GetItemAsync(string identity)
+    public async Task<User?> GetUserByIdentityAsync(string identity)
     {
         if (! await _connection.CheckTableIfExists(TableName)) await CreateTable();
 
@@ -114,16 +114,15 @@ public class UserRepository
         return user;
     }
     
-    public async Task<ImmutableList<User>> GetAllItemsAsync()
+    public async Task<List<User>> GetUsersAsync()
     {
         if (! await _connection.CheckTableIfExists(TableName)) await CreateTable();
         
-        var users = (await Get()).ToImmutableList();
 
-        return users;
+        return (await Get()).ToList();
     }
 
-    public async Task<User?> CreateItemAsync(UserRegisterDto model)
+    public async Task<User?> CreateUserAsync(UserRegisterDto model)
     {
         if (! await _connection.CheckTableIfExists(TableName)) await CreateTable();
         try
@@ -165,7 +164,7 @@ public class UserRepository
 
     }
 
-    public async Task<User?> UpdateItemAsync(UserDetailDto model)
+    public async Task<User?> UpdateUserAsync(UserDetailDto model)
     {
         if (! await _connection.CheckTableIfExists(TableName)) await CreateTable();
 
@@ -211,7 +210,7 @@ public class UserRepository
 
     }
 
-    public async Task<bool> DeleteItemAsync(int id)
+    public async Task<bool> DeleteUserAsync(int id)
     {
         try
         {

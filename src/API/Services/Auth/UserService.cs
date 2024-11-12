@@ -17,7 +17,7 @@ public class UserService
 
     public async Task<Result<UserViewModel?>> EditUserAsync(UserDetailDto model)
     {
-        var result = await _repository.UpdateItemAsync(model);
+        var result = await _repository.UpdateUserAsync(model);
         var success = result != null;
         
         return new Result<UserViewModel?>()
@@ -34,7 +34,7 @@ public class UserService
     }
     public async Task<Result<UserViewModel?>> LoginUserAsync(UserLoginDto model)
     {
-        var result = await _repository.GetItemAsync(model.Identity);
+        var result = await _repository.GetUserByIdentityAsync(model.Identity);
 
         var authenticate = result != null && Authenticate(model.Password, result.Password);
 
@@ -78,7 +78,7 @@ public class UserService
             };
 
   
-        var result = await _repository.CreateItemAsync(
+        var result = await _repository.CreateUserAsync(
             new UserRegisterDto(
                 model.Email,
                 model.Username,
@@ -104,7 +104,7 @@ public class UserService
 
     public async Task<Result<UserViewModel?>> GetUserByIdAsync(int id)
     {
-        var result = await _repository.GetItemAsync(id);
+        var result = await _repository.GetUserByIdAsync(id);
         var success = result != null;
         
         return new Result<UserViewModel?>()
@@ -122,7 +122,7 @@ public class UserService
 
     public async Task<Result<ImmutableList<UserViewModel>>> GetAllUsers()
     {
-        var result = await _repository.GetAllItemsAsync();
+        var result = await _repository.GetUsersAsync();
         var success = result.Any();
         return new Result<ImmutableList<UserViewModel>>()
         {
@@ -139,7 +139,7 @@ public class UserService
 
     public async Task<Result<bool>> DeleteUser(UserDetailDto model)
     {
-        var existingUser = await _repository.GetItemAsync(model.Id);
+        var existingUser = await _repository.GetUserByIdAsync(model.Id);
         if (existingUser == null) return new Result<bool>
         {
             IsSuccess = false,
@@ -156,7 +156,7 @@ public class UserService
             };
         }
 
-        var result = await _repository.DeleteItemAsync(model.Id);
+        var result = await _repository.DeleteUserAsync(model.Id);
         return new Result<bool>()
         {
             IsSuccess = true,
