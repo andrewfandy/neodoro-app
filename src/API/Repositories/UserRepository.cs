@@ -2,6 +2,7 @@
 using System.Text;
 using API.Databases;
 using API.Models.DTOs;
+using API.Models.DTOs.Users;
 using API.Models.Entities;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -225,7 +226,14 @@ public class UserRepository
             sb.Append("WHERE Id=@Id");
             var sql = sb.ToString();
 
-            var exec = await sqlConnection.ExecuteAsync(sql, transaction);
+            var exec = await sqlConnection.ExecuteAsync(
+                sql, 
+                new
+                {
+                    Id = id
+                },
+                transaction
+                );
             var success = exec == 1;
             if (success)
             {
