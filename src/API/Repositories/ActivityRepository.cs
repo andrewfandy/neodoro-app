@@ -1,4 +1,5 @@
 using API.Models.DTOs;
+using API.Models.DTOs.Activities;
 using API.Models.Entities;
 
 namespace API.Repositories;

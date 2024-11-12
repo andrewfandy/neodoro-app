@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Models.DTOs;
+namespace API.Models.DTOs.TimerSessions;
 
 public record TimerSessionDto(
     int Id,
